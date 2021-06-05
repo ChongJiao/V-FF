@@ -1,6 +1,0 @@
-build
-lib
-.vscode
-*.exe
-src/*.mp4
-src/*.MP4
