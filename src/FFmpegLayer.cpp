@@ -1,4 +1,6 @@
 #include "FFmpegLayer.hpp"
+#include "imgui.h"
+
 #include "GLFW/glfw3.h"
 
 void FFmpegLayer::Attach(){
@@ -83,6 +85,7 @@ FFmpegLayer::FFmpegLayer(): Layer("FFmpegLayer"){
     m_InitialStatus = true;
 }
 
+
 void FFmpegLayer::SetShowProps(const int& width, const int& height){
     m_DefaultTexture->Init(width, height);  
 }
@@ -114,4 +117,24 @@ void FFmpegLayer::Update() {
     m_DefaultShader->Use();
     m_DefaultObject->Bind();
     m_DefaultObject->DrawElement();
+}
+
+void FFmpegLayer::ImGuiRender(){
+   	static float f = 0.0f;
+	static int counter = 0;
+
+	ImGui::Begin("Hello, world!");                          // Create a window called "Hello, world!" and append into it.
+
+	ImGui::Text("This is some useful text.");               // Display some text (you can use a format strings too)
+
+	ImGui::SliderFloat("float", &f, 0.0f, 1.0f);            // Edit 1 float using a slider from 0.0f to 1.0f
+	//ImGui::ColorEdit3("clear color", (float*)&clear_color); // Edit 3 floats representing a color
+
+	if (ImGui::Button("Button"))                            // Buttons return true when clicked (most widgets return true when edited/activated)
+		counter++;
+	ImGui::SameLine();
+	ImGui::Text("counter = %d", counter);
+
+	ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
+	ImGui::End();
 }

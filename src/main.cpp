@@ -1,11 +1,10 @@
 #include <stdio.h>
 #include "FFmpegLayer.hpp"
-#include "Render.hpp"
-
+#include "Application.hpp"
 
 int main(int argc, char** argv){
-    VFF::Ref<Render> render = VFF::CreateRef<Render>(1080, 720);
-    if(!render->Init("video-app")){
+    VFF::Ref<Application> app = VFF::CreateRef<Application>();
+    if(!app->Init("video-app", 1280, 720)){
         printf("Render init error\n");
         return false;
     }
@@ -15,9 +14,9 @@ int main(int argc, char** argv){
         printf("FFmpeg init error \n");
         return -1;
     }
-    render->PushLayer(fLayer);
+    app->PushLayer(fLayer);
     
-    render->Run();
+    app->Run();
     return 0;
 }
 

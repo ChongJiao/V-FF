@@ -10,7 +10,9 @@ namespace VFF{
         virtual void Attach() = 0;
         virtual void Detach() = 0;
 
-        virtual void Update() = 0;
+		virtual void Update() {};
+
+		virtual void ImGuiRender() {};
     public:
         std::string m_LayerName;
 

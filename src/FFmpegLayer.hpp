@@ -13,6 +13,7 @@ public:
     virtual void Attach() override;
     virtual void Detach() override;
     virtual void Update() override;
+    virtual void ImGuiRender() override;
 
     bool OpenVideoByFFmpge(const char* filename);
     inline bool GetInitStatus() {return m_InitialStatus;}
