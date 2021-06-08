@@ -5,11 +5,14 @@
 namespace VFF{
     class Layer{
     public:
+        Layer(const std::string& name = "Layer");
+
+        virtual void Attach() = 0;
+        virtual void Detach() = 0;
+
         virtual void Update() = 0;
-        virtual bool Init() = 0;
     public:
-        Ref<VertexArray> m_DefaultObject;
-        Ref<Texture> m_DefaultTexture;
-        Ref<Shader> m_DefaultShader;
+        std::string m_LayerName;
+
     };
 }

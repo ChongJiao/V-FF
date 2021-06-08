@@ -11,11 +11,10 @@ int main(int argc, char** argv){
     }
 
     Ref<Layer> fLayer = VFF::CreateRef<FFmpegLayer>(); 
-	if(!fLayer->Init())
-	{
-		printf("Layer init error\n");
-		return -1;
-	}
+    if(!((FFmpegLayer*)fLayer.get())->GetInitStatus()){
+        printf("FFmpeg init error \n");
+        return -1;
+    }
     render->PushLayer(fLayer);
     
     render->Run();

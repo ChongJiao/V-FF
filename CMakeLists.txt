@@ -4,11 +4,12 @@ set(CMAKE_CXX_STANDARD 14)
 
 
 add_subdirectory(lib/glfw)
-add_subdirectory(lib/glm)
+# add_subdirectory(lib/glm)
 
 
 include_directories(lib/glad/include)
 include_directories(lib/FFmpeg/include)
+include_directories(lib/imgui/include)
 link_directories(lib/FFmpeg/lib)
 
 #add_definitions(_DGL_SILENCE_DEPRECATION)
@@ -19,8 +20,8 @@ link_directories(lib/FFmpeg/lib)
 #     src/*.cpp
 #     src/*.hpp
 # )
-FILE(GLOB ALL_SOURCE_FILE "./src/*.cpp", "./src/*.hpp", "lib/glad/lib/glad.c")
-aux_source_directory(./src DIR_SRCS)
+FILE(GLOB ALL_SOURCE_FILE "src/*.cpp", "src/*.hpp", "lib/glad/lib/glad.c", "lib/imgui/src/*.cpp")
+# aux_source_directory(./src DIR_SRCS)
 
 list(APPEND EXTRA_LIBS
     "opengl32.lib"

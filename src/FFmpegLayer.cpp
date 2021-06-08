@@ -1,7 +1,14 @@
 #include "FFmpegLayer.hpp"
 #include "GLFW/glfw3.h"
 
-bool FFmpegLayer::Init(){
+void FFmpegLayer::Attach(){
+
+}
+void FFmpegLayer::Detach(){
+
+}
+
+FFmpegLayer::FFmpegLayer(): Layer("FFmpegLayer"){
  
     const char* vertex_shader_string =
     "#version 330 core\n"
@@ -71,10 +78,9 @@ bool FFmpegLayer::Init(){
     // OpenVideo
     if(!OpenVideoByFFmpge("D:\\work\\cpp\\video-app\\src\\Test2.mp4")){
         printf("Open Video Error \n");
-        return false;
+        return;
     }
-
-    return true;
+    m_InitialStatus = true;
 }
 
 void FFmpegLayer::SetShowProps(const int& width, const int& height){
