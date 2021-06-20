@@ -1,6 +1,8 @@
+#include <iostream>
 #include "glad/glad.h"
 #include "RenderElement.hpp"
 #include "GLFW/glfw3.h"
+#include <fstream>
 
 namespace VFF{
 	static GLenum GetOpenGLBasedType(const ShaderDataType& type) {
@@ -97,7 +99,7 @@ namespace VFF{
     }
 
     void Texture::Init(const char* texturePath){
-        
+        //TODO: Set texture From Texture path
     }
     void Texture::Init(const int& width, const int& height){
         m_TextureWidth = width;
@@ -122,19 +124,19 @@ namespace VFF{
         glBindTexture(GL_TEXTURE_2D, m_TextureID);
     }
 
-
-    //Shader Object
-    Shader::Shader(const char* vertex_shader_string, const char* fragement_shader_string){
+    void Shader::AttachShader(const std::string& vertex_shader_string, const std::string& fragement_shader_string){
         unsigned int vertex, fragement;
 
         // vertex Shader
         vertex = glCreateShader(GL_VERTEX_SHADER);
-        glShaderSource(vertex, 1, & vertex_shader_string, NULL);
+        const char* vertex_shader_source_cstr = vertex_shader_string.c_str();
+        glShaderSource(vertex, 1, &vertex_shader_source_cstr, NULL);
         glCompileShader(vertex);
         CheckCompileErrors(vertex, "VERTEX");
 
         fragement = glCreateShader(GL_FRAGMENT_SHADER);
-        glShaderSource(fragement, 1, &fragement_shader_string, NULL);
+        const char* fragement_shader_source_cstr = fragement_shader_string.c_str();
+        glShaderSource(fragement, 1, &fragement_shader_source_cstr, NULL);
         glCompileShader(fragement);
         CheckCompileErrors(fragement, "FRAGEMENT");
 
@@ -146,7 +148,69 @@ namespace VFF{
         glLinkProgram(m_Program_ID);
         CheckCompileErrors(m_Program_ID, "PROGRAM");
         glDeleteShader(vertex);
-        glDeleteShader(fragement);
+        glDeleteShader(fragement);       
+    }
+
+    //Shader Object init from shader string and fragment string
+    Shader::Shader(const std::string& name, const std::string& vertex_shader_string, 
+    const std::string& fragement_shader_string): m_ShaderName(name){
+        AttachShader(vertex_shader_string, fragement_shader_string);
+    }
+
+    Shader::Shader(const std::string& name, const std::string& shader_file) : m_ShaderName(name){
+        // TODO Get Shader content form shader file 
+        std::ifstream fs;
+        fs.open(shader_file, std::ios::binary | std::ios::in);
+        if(!fs){
+            printf("shader file open error");
+            return;
+        }
+        fs.seekg(0, std::ios::end);
+        size_t len = fs.tellg();
+        fs.seekg(0, std::ios::beg);
+        std::string buffer;
+        if(len != -1){
+            buffer.resize(len);
+            fs.read(&buffer[0], len);
+            fs.close();
+            // TODO: parse vertex shader and fragement shader from buffer 
+
+            const char* token = "#type";
+            size_t token_length = strlen(token);
+            size_t token_pos = buffer.find(token, 0);
+            if(token_pos == std::string::npos)return;
+            size_t el = buffer.find_first_of("\r\n", token_pos);
+            if(el == std::string::npos)return;
+            size_t begin = token_pos + token_length + 1;
+            std::string type = buffer.substr(begin, el - begin);
+            if(type != "vertex")return;
+            
+            size_t shader_content_line = buffer.find_first_not_of("\r\n", el);
+            if(shader_content_line == std::string::npos)return;
+            size_t next_token_pos = buffer.find(token, shader_content_line);
+            if(next_token_pos == std::string::npos)return;
+            
+            std::string vertex_shader_str, fragement_shader_str;
+            vertex_shader_str = buffer.substr(shader_content_line, next_token_pos - shader_content_line);
+
+            begin = next_token_pos + token_length + 1;
+            el = buffer.find_first_of("\r\n", next_token_pos);
+            type = buffer.substr(begin, el - begin);
+            if(type != "fragment")return;
+            shader_content_line = buffer.find_first_not_of("\r\n", el);
+            if(shader_content_line == std::string::npos)return;
+            fragement_shader_str = buffer.substr(shader_content_line, buffer.size() - shader_content_line);
+            
+            AttachShader(vertex_shader_str, fragement_shader_str);
+  
+        }else {
+            return;
+        }
+
+    }
+
+    const char* Shader::LoadShaderString(const std::string& shader_file){
+        return "test";
     }
 
     void Shader::Use(){

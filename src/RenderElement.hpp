@@ -52,7 +52,8 @@ namespace VFF{
     class Shader{
     public:
         unsigned int m_Program_ID;
-        Shader(const char* vertex_shader_string, const char* fragment_shader_string);
+        Shader(const std::string& name, const std::string& vertex_shader_string, const std::string& fragment_shader_string);
+        Shader(const std::string& name, const std::string& shader_file);
         //TODO: init shader from shader file
         //Shader(const char* vertex_shader_file, const char* fragment_shader_file);
 
@@ -66,6 +67,10 @@ namespace VFF{
     
         //TODO: set vec and mat by glm
     private:
+        std::string m_ShaderName;
+    private:
+        void AttachShader(const std::string& vertex_shader_string, const std::string& fragement_shader_string);
+        const char* LoadShaderString(const std::string& shader_file);
         void CheckCompileErrors(GLuint shader, std::string type);
     };
 }

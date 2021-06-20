@@ -44,7 +44,8 @@ FFmpegLayer::FFmpegLayer(): Layer("FFmpegLayer"){
     "}\n"
     ;
 
-    m_DefaultShader = VFF::CreateRef<Shader>(vertex_shader_string, fragment_shader_string);
+    // m_DefaultShader = VFF::CreateRef<Shader>("FFmpeg Shader", vertex_shader_string, fragment_shader_string);
+    m_DefaultShader = VFF::CreateRef<Shader>("FFmpeg shader", "FFmpeg.glsl");
 	m_DefaultShader->Use();
 	m_DefaultShader->setInt("image", 0);
 
